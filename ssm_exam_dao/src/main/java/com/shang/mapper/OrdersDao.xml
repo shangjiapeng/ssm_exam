@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shang.dao.OrdersDao">
+    <!--定义查询所有的订单的结果集-->
+    <resultMap id="orders_product" type="com.shang.domain.Orders">
+        <id property="id" column="oid"></id>
+        <result property="orderNum" column="ordernum"></result>
+        <result property="orderStatus" column="orderstatus"></result>
+        <result property="orderTime" column="ordertime"></result>
+        <association property="product" javaType="com.shang.domain.Product">
+            <result property="productName" column="productname"></result>
+            <result property="productPrice" column="productprice"></result>
+        </association>
+    </resultMap>
+    <!--查询所有的订单-->
+    <select id="findAllOrders" resultMap="orders_product">
+        select o.id oid,o.ordernum,p.productname,p.productprice,o.ordertime,o.orderstatus
+      from orders o left JOIN product p on o.productid=p.id
+    </select>
+
+    <!--定义根据订单的id查询订单的信息的结果集-->
+    <resultMap id="orders_product_member_traveller" type="com.shang.domain.Orders">
+        <!--orders表-->
+        <id property="id" column="id"></id>
+        <result property="orderNum" column="ordernum"></result>
+        <result property="orderTime" column="ordertime"></result>
+        <result property="peopleCount" column="peoplecount"></result>
+        <result property="orderDesc" column="orderdesc"></result>
+        <result property="payType" column="paytype"></result>
+        <result property="orderStatus" column="orderstatus"></result>
+        <!--与product表一对一关系-->
+        <association property="product"
+                     column="productid"
+                     select="com.shang.dao.ProductDao.findProductById"
+                     javaType="com.shang.domain.Product">
+        </association>
+        <!--与member表的一对一关系-->
+        <association property="member"
+                     column="memberid"
+                     select="com.shang.dao.MemberDao.findMemberById"
+                     javaType="com.shang.domain.Member">
+        </association>
+        <!--与traveller表的多对多关系-->
+        <collection property="travellers"
+                    column="id"
+                    ofType="com.shang.domain.Traveller"
+                    select="com.shang.dao.TravellerDao.findTravellerByOrderId">
+        </collection>
+    </resultMap>
+
+    <!--根据订单的id查询订单的信息-->
+    <select id="findOrdersById" parameterType="String" resultMap="orders_product_member_traveller">
+        SELECT *FROM ORDERS WHERE id=#{id}
+    </select>
+
+</mapper>

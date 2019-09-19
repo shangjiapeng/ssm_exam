@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shang.dao.RoleDao">
+    <!--查询所有的角色-->
+    <select id="findAllRole" resultType="com.shang.domain.Role">
+        SELECT * FROM ROLE
+    </select>
+    <!--添加角色-->
+    <insert id="saveRole" parameterType="com.shang.domain.Role">
+        INSERT into ROLE(ROLENAME,ROLEDESC) VALUES(#{roleName},#{roleDesc})
+    </insert>
+
+    <!--定义根据角色查询权限的结果集-->
+    <resultMap id="role_permissions" type="com.shang.domain.Role" autoMapping="true">
+        <id property="id" column="id"></id>
+        角色和权限多对多映射
+        <collection property="permissions"
+                    column="id"
+                    ofType="com.shang.domain.Permission"
+                    select="com.shang.dao.PermissionDao.findPermissionByRoleId">
+        </collection>
+    </resultMap>
+
+    <!--根据用户id查询用户的角色以及权限信息-->
+    <select id="findRoleByUserId" parameterType="String" resultMap="role_permissions" >
+       select * from role r left join userinfo_role ur on r.id=ur.roleid where ur.userid=#{userid}
+    </select>
+
+    <!--根据角色id查询角色详情(包含了角色的权限信息)-->
+    <select id="findRoleByRoleId" parameterType="String" resultMap="role_permissions">
+        SELECT *from ROLE WHERE ID =#{roleid}
+    </select>
+
+
+    <!--根据用户id查询出当前用户所没有的角色信息-->
+    <select id="findOtherRole" parameterType="String" resultType="com.shang.domain.Role">
+        select * from role where id not in( select roleId from userinfo_role where userId=#{userid})
+    </select>
+
+</mapper>

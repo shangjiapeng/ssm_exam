@@ -1,0 +1,6 @@
+# Project exclude paths
+/ssm_exam_dao/target/
+/ssm_exam_pojo/target/
+/ssm_exam_service/target/
+/ssm_exam_utils/target/
+/ssm_exam_web/target/

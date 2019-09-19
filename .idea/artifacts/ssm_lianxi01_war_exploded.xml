@@ -1,0 +1,16 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="ssm_lianxi01:war exploded">
+    <output-path>$PROJECT_DIR$/../ssm_lianxi01/target/ssm_lianxi01</output-path>
+    <root id="root">
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="ssm_lianxi01" />
+        </element>
+      </element>
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/../ssm_lianxi01/target/ssm_lianxi01/META-INF/MANIFEST.MF" />
+      </element>
+      <element id="javaee-facet-resources" facet="ssm_lianxi01/web/Web" />
+    </root>
+  </artifact>
+</component>

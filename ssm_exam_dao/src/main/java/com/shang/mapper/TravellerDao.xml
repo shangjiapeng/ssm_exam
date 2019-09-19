@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shang.dao.TravellerDao">
+    <!--根据会员号查询会员信息-->
+    <select id="findTravellerByOrderId" parameterType="String" resultType="com.shang.domain.Traveller">
+        SELECT t.*FROM TRAVELLER t LEFT JOIN ORDER_TRAVELLER ot ON t.ID = ot.TRAVELLERID WHERE ot.ORDERID=#{id}
+    </select>
+</mapper>
